@@ -1,6 +1,37 @@
-function getComputerChoice(){
+const buttons = document.querySelectorAll('.rps');
+const resetBtn = document.querySelector('.reset');
+const player = document.querySelector('.player');
+const computer = document.querySelector('.computer');
+const roundResult = document.querySelector('.roundResult');
+const score = document.querySelector('.score');
+const finalResult = document.querySelector('.finalResult');
+let playerScore = 0;
+let computerScore = 0;
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const playerSelection = button.textContent;
+        const computerSelection = getComputerChoice();
+        player.textContent = "Player Selection: " + playerSelection;
+        computer.textContent = "Computer Selection: " + computerSelection;
+        roundResult.textContent = playRound(playerSelection, computerSelection);
+        scoreboard(roundResult.textContent)
+    })
+})
+
+resetBtn.addEventListener('click', () => {
+    playerScore = 0;
+    computerScore = 0;
+    player.textContent = "";
+    computer.textContent = "";
+    roundResult.textContent = "";
+    score.textContent = "";
+    finalResult.textContent = "";
+})
+
+function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
-    switch (choice){
+    switch (choice) {
         case 0:
             return "Rock";
         case 1:
@@ -10,9 +41,9 @@ function getComputerChoice(){
     }
 }
 function playRound(playerSelection, computerSelection) {
-    switch (computerSelection){
+    switch (computerSelection) {
         case "Rock":
-            switch (playerSelection.toLowerCase()){
+            switch (playerSelection.toLowerCase()) {
                 case "rock":
                     return "It's a Draw";
                 case "paper":
@@ -23,7 +54,7 @@ function playRound(playerSelection, computerSelection) {
                     return "Invalid input";
             }
         case "Paper":
-            switch (playerSelection.toLowerCase()){
+            switch (playerSelection.toLowerCase()) {
                 case "paper":
                     return "It's a Draw";
                 case "scissors":
@@ -31,10 +62,10 @@ function playRound(playerSelection, computerSelection) {
                 case "rock":
                     return "You Lose! Paper beats Rock";
                 default:
-                        return "Invalid input";
+                    return "Invalid input";
             }
         case "Scissors":
-            switch (playerSelection.toLowerCase()){
+            switch (playerSelection.toLowerCase()) {
                 case "scissors":
                     return "It's a Draw";
                 case "rock":
@@ -47,35 +78,22 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game(){
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        console.log("Round " + (i+1));
-        const playerSelection = prompt("Make a choice");
-        const computerSelection = getComputerChoice();
-        console.log("Player Selection: " + playerSelection);
-        console.log("Computer Selection: " + computerSelection);
-        let roundResult = playRound(playerSelection, computerSelection);
-        if (roundResult.includes("Win")){
-            playerScore += 1;
-        } else if (roundResult.includes("Lose")){
-            computerScore += 1;
-        }
-        console.log(roundResult);
-        console.log("Player Score: " + playerScore);
-        console.log("Computer Score: " + computerScore);
-     }
-     console.log("Final Result:")
-     if (playerScore>computerScore){
-         console.log("Player Wins!")
-     } else if (computerScore>playerScore){
-         console.log("Computer Wins!")
-     } else {
-         console.log("It's a Draw");
-     }
+function scoreboard(roundResult) {
+    if (roundResult.includes("Win")) {
+        playerScore += 1;
+    } else if (roundResult.includes("Lose")) {
+        computerScore += 1;
+    }
+    score.textContent = "Player: " + playerScore + " v.s. Computer: " + computerScore;
+    if (playerScore < 5 && computerScore <5){
+        finalResult.textContent = "";
+    } else if (playerScore == 5){
+        finalResult.textContent = "Player Wins!";
+        playerScore = 0;
+        computerScore = 0;
+    } else if (computerScore == 5){
+        finalResult.textContent = "Computer Wins!";
+        playerScore = 0;
+        computerScore = 0;
+    }
 }
-
-game();
-   
-
